@@ -7,7 +7,7 @@ using namespace std;
 int C, n, m;
 bool (*areFriends)[10];
 
-int countParings(bool taken[]) {
+int countParings(bool (&taken)[10]) {
     int firstFree = -1;
     for (int i = 0; i < n; i++) {
         if (!taken[i]) {
