@@ -37,6 +37,7 @@ int getMax(int left, int right) {
 }
 
 int main() {
+    ios_base::sync_with_stdio(false); // 이 부분이 시간에 엄청 영향을 주네요.
     cin >> C;
     for (int i = 0; i < C; i++) {
         cin >> N;
