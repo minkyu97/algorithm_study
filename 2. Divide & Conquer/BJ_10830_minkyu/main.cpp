@@ -5,26 +5,30 @@
 
 using namespace std;
 typedef long long ll;
-typedef vector<vector<int> > matrix;
+template <class T>
+using matrix = vector<vector<T> >;
+
+template <class T>
+std::ostream& operator << (std::ostream &out, const matrix<T> &m)
+{
+    for (int i = 0; i < m.size(); i++) {
+        for (int j = 0; j < m[0].size(); j++) {
+            out << m[i][j] << ' ';
+        }
+        out << endl;
+    }
+    return out;
+}
 
 int N;
 ll B;
-matrix m;
-matrix one;
+matrix<int> m;
+matrix<int> one;
 int input;
 vector<bool> plusOne;
 
-void printMatrix(matrix& mat) {
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < N; j++) {
-            cout << mat[i][j] << ' ';
-        }
-        cout << endl;
-    }
-}
-
-void multiply(matrix& A, matrix& B) {
-    matrix newA (N, vector<int>(N, 0));
+void multiply(matrix<int>& A, matrix<int>& B) {
+    matrix<int> newA (N, vector<int>(N, 0));
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             for (int k = 0; k < N; k++) {
@@ -36,7 +40,7 @@ void multiply(matrix& A, matrix& B) {
     A = newA;
 }
 
-void order(ll B) {
+void order() {
     while(B != 1) {
         if (B % 2 == 0) {
             plusOne.push_back(false);
@@ -46,7 +50,9 @@ void order(ll B) {
             plusOne.push_back(true);
             B -= 1;
         }
+        // cout << B << endl;
     }
+    // for (bool* it = plusOne.begin(); it )
 }
 
 void solve() {
@@ -70,9 +76,9 @@ int main() {
         }
     }
 
-    order(B);
+    order();
     solve();
-    printMatrix(m);
+    cout << m;
 
     return 0;
 }
