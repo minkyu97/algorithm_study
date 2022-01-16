@@ -23,8 +23,8 @@ std::ostream& operator << (std::ostream &out, const matrix<T> &m)
 template <class T>
 matrix<T> operator * (matrix<T>& m1, matrix<T>& m2) {
     int size = m1.size();
-    assert(m1[0].size == size);
-    matrix ret (size, vector<T>(size, 0));
+    assert(m1[0].size() == size);
+    matrix<T> ret (size, vector<T>(size, 0));
     for (int i = 0; i < size; i++) {
         for (int j = 0; j < size; j++) {
             for (int k = 0; k < size; k++) {
