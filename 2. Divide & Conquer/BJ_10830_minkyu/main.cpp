@@ -20,25 +20,27 @@ std::ostream& operator << (std::ostream &out, const matrix<T> &m)
     return out;
 }
 
+template <class T>
+matrix<T> operator * (matrix<T>& m1, matrix<T>& m2) {
+    int size = m1.size();
+    assert(m1[0].size == size);
+    matrix ret (size, vector<T>(size, 0));
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size; j++) {
+            for (int k = 0; k < size; k++) {
+                ret[i][j] += m1[i][k] * m2[k][j];
+            }
+        }
+    }
+    return ret;
+}
+
 int N;
 ll B;
 matrix<int> m;
 matrix<int> one;
 int input;
 vector<bool> plusOne;
-
-void multiply(matrix<int>& A, matrix<int>& B) {
-    matrix<int> newA (N, vector<int>(N, 0));
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < N; j++) {
-            for (int k = 0; k < N; k++) {
-                newA[i][j] += A[i][k] * B[k][j];
-                if (newA[i][j] > 999) newA[i][j] %= 1000;
-            }
-        }
-    }
-    A = newA;
-}
 
 void order() {
     while(B != 1) {
@@ -58,8 +60,8 @@ void order() {
 void solve() {
     vector<bool>::reverse_iterator rit;
     for (rit = plusOne.rbegin(); rit != plusOne.rend(); rit++) {
-        if (*rit) multiply(m, one);
-        else multiply(m, m);
+        if (*rit) m = m * one;
+        else m = m * one;
     }
 }
 
