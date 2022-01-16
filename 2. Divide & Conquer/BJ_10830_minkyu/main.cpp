@@ -23,12 +23,12 @@ std::ostream& operator << (std::ostream &out, const matrix<T> &m)
 template <class T>
 matrix<T> operator * (matrix<T>& m1, matrix<T>& m2) {
     int size = m1.size();
-    assert(m1[0].size() == size);
     matrix<T> ret (size, vector<T>(size, 0));
     for (int i = 0; i < size; i++) {
         for (int j = 0; j < size; j++) {
             for (int k = 0; k < size; k++) {
                 ret[i][j] += m1[i][k] * m2[k][j];
+                if (ret[i][j] > 999) ret[i][j] %= 1000;
             }
         }
     }
@@ -52,16 +52,14 @@ void order() {
             plusOne.push_back(true);
             B -= 1;
         }
-        // cout << B << endl;
     }
-    // for (bool* it = plusOne.begin(); it )
 }
 
 void solve() {
     vector<bool>::reverse_iterator rit;
     for (rit = plusOne.rbegin(); rit != plusOne.rend(); rit++) {
         if (*rit) m = m * one;
-        else m = m * one;
+        else m = m * m;
     }
 }
 
@@ -73,6 +71,7 @@ int main() {
         one.push_back(vector<int>());
         for (int j = 0; j < N; j++) {
             cin >> input;
+            if (input == 1000) input = 0;
             m[i].push_back(input);
             one[i].push_back(input);
         }
