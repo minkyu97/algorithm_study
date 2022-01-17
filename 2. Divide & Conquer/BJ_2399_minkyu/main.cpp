@@ -17,6 +17,7 @@ int N, input;
 matrix<int> slate;
 vector<Point> dirtys, gems;
 
+// 특정 열 혹은 행을 자를 수 있는지 판단 -> 즉, 보석이 포함되면 false, 없으면 true
 bool isSectile(int start, int end, int con, bool isRow) {
     if (isRow) {
         for (int i = start; i <= end; i++) {
@@ -33,9 +34,14 @@ bool isSectile(int start, int end, int con, bool isRow) {
 
 
 int solve(int r1, int r2, int c1, int c2, bool isRow, vector<Point>& dirtys, vector<Point>& gems) {
+    // 기저조건 1 자르고 자르다가 넓이가 0이 됐을 때, 즉 폭이 0이거나 높이가 0
     if (r1 > r2 || c1 > c2) return 0;
+
+    // 기저조건 2 주어진 영역에 보석 1개, 불순물 0개일 때
     if (gems.size() == 1 && dirtys.size() == 0) return 1;
     int ret = 0;
+
+    // isRow 값에 따라 가로로 자를지 세로로 자를지 결정
     if (isRow) {
         for (Point p: dirtys) {
             int row = p.row;
@@ -88,9 +94,11 @@ int main() {
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             cin >> input;
+            // dirtys에 불순물 위치 저장
             if (input == 1) {
                 dirtys.push_back(Point {i, j});
             }
+            // gems에 보석 위치 저장
             else if (input == 2) {
                 gems.push_back(Point {i, j});
             }
