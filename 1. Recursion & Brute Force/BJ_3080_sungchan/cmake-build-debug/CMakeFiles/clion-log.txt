@@ -1,0 +1,4 @@
+/Users/sungchan/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_DEPENDS_USE_COMPILER=FALSE -G "CodeBlocks - Unix Makefiles" "/Users/sungchan/CLionProjects/algorithm/algorithm_study/1. Recursion & Brute Force/BJ_3080_sungchan"
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /Users/sungchan/CLionProjects/algorithm/algorithm_study/1. Recursion & Brute Force/BJ_3080_sungchan/cmake-build-debug
