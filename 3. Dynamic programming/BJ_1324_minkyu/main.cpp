@@ -15,8 +15,8 @@ matrix results;
 
 int solve(int beforeIndex, int beforeIndexOfSecond) {
     if (beforeIndex == N) return 0;
-    if (results[beforeIndex][beforeIndexOfSecond]) return results[beforeIndex][beforeIndexOfSecond];
-    int ret = 0;
+    int& ret = results[beforeIndex][beforeIndexOfSecond];
+    if (ret) return ret;
     for (int i = beforeIndex + 1; i <= N; i++) {
         if (trash[i] > trash[beforeIndex] && mem[trash[i]].size() != 0) {
             int secondIndex = 1001;
@@ -31,7 +31,6 @@ int solve(int beforeIndex, int beforeIndexOfSecond) {
             ret = temp > ret ? temp : ret;
         }
     }
-    results[beforeIndex][beforeIndexOfSecond] = ret;
     return ret;
 }
 

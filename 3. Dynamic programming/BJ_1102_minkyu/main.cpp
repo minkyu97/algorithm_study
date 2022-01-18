@@ -16,7 +16,7 @@ vector<bool> isOn;
 vector<int> onList;
 // 이 부분 매우 중요!! 65536이라는 숫자도, -1도 중요함
 // 메모이제이션을 활용한 DP의 핵심 로직
-vector<int> memory(65536, -1);
+vector<int> memory(65536, INF);
 
 // 메모이제이션 안 된 부분 계산하는 로직.. 부분적인 완전탐색이라 어려울 건 없음
 int getMinCostToTurnOn(int plant) {
@@ -33,13 +33,14 @@ int getMinCostToTurnOn(int plant) {
 int solve() {
     // 기저조건: size가 P가 되면 더 이상 비용이 들지 않음
     if(onList.size() == P) return 0;
+    // 비트 해싱 기법을 통한 캐시값 탐색
     int mem_index = 0;
     for (int onIndex: onList) {
         mem_index += 1 << onIndex;
     }
-    if (memory[mem_index] != -1) return memory[mem_index];
-
-    int ret = INF;
+    // ret을 캐시값의 참조변수로 설정
+    int& ret = memory[mem_index];
+    if (ret != INF) return ret;
     for (int i = 0; i < N; i++) {
         if (!isOn[i]) {
             int temp = getMinCostToTurnOn(i);
@@ -51,8 +52,6 @@ int solve() {
             onList.pop_back();
         }
     }
-    memory[mem_index] = ret;
-
     return ret;
 }
 
