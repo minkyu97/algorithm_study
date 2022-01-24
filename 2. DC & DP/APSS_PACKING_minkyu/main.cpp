@@ -38,10 +38,10 @@ int main() {
     cin >> C;
     for (int i = 0; i < C; i++) {
         cin >> N >> W;
-        name = vector<string> (N);
-        info = vector<int*> (N);
-        cache = matrix(N, (vector<int> (W+1)));
-        choice = matrix(N, (vector<int> (W+1, -1)));
+        name = vector<string> (N+1);
+        info = vector<int*> (N+1);
+        cache = matrix(N+1, (vector<int> (W+1)));
+        choice = matrix(N+1, (vector<int> (W+1, -1)));
         for (int j = 0; j < N; j++) {
             info[j] = new int[2];
             cin >> name[j] >> info[j][0] >> info[j][1];
