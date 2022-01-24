@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <cmath>
 #define endl '\n'
 #define MAX 987654321
 
@@ -18,31 +19,29 @@ int cpuindex(int cpu) {
     return cpu;
 }
 
-// start 이후부터 끌 수 있을 때, 앞으로 최소 몇의 중요도를 이용해서 조건을 만족시킬 수 있는지 반환
-int solve(int start, int cpu, int memory) {
-    if (cpu >= M && memory >= K) return 0;
-    if (start == N) return MAX;
-    int& ret = cache[start][0];
-    int& retcpu = cache[start][1];
-    int& retmem = cache[start][2];
-    if (ret != MAX && retcpu >= cpu && retmem >= memory) return MAX;
-    int temp = tab[start][2] + solve(start+1, cpu+tab[start][0], memory+tab[start][1]);
-    if (temp != MAX) {
-        if (temp < ret) {
-            ret = temp;
-            retcpu = cpu;
-            retmem = memory;
-        }
+// start이전의 탭들은 어떤 걸 끄고 켤지 이전 재귀에서 결정이 되었다.
+// 그 동안 사용한 중요도와 얻은 cpu, memory를 인자로 받았다.
+// cache에 기록된 것보다 현재 상황이 나아졌다면, 계속 나아간다.
+// 아니라면, 잘못된 선택이므로 MAX를 반환한다.
+void solve(int start, int cpu, int memory, int priority) {
+    if (start == N) return;
+    if (cpu >= M && memory >= K) {
+        cache[start][0] = cpu;
+        cache[start][1] = memory;
+        cache[start][2] = priority;
+        return;
     }
-    temp = solve(start+1, cpu, memory);
-    if (temp != MAX) {
-        if (temp < ret) {
-            ret = temp;
-            retcpu = cpu;
-            retmem = memory;
-        }
+    int& cachecpu = cache[start][0];
+    int& cachemem = cache[start][1];
+    int& cachepri = cache[start][2];
+    if (cachecpu >= min(cpu, M) && cachemem >= min(cpu, K) && priority >= cachepri) return;
+    if (cpu >= min(cachecpu, M) && memory >= min(cachemem, K) && priority <= cachepri) {
+        cachecpu = cpu;
+        cachemem = memory;
+        cachepri = priority;
     }
-    return ret;
+    solve(start+1, cpu+tab[start][0], memory+tab[start][1], priority+tab[start][2]);
+    solve(start+1, cpu, memory, priority);
 }
 
 int main() {
@@ -62,5 +61,13 @@ int main() {
     if (totalcpu == M || totalmem == K) {
         return totalpri;
     }
-    cout << solve(0, 0, 0) << endl;
+
+    solve(0, 0, 0, 0);
+
+    int minpri = MAX;
+    for (int i = 0; i < N; i++) {
+        if (cache[i][0] >= M && cache[i][1] >= K && cache[i][2] < minpri) minpri = cache[i][2];
+    }
+
+    cout << minpri << endl;
 }
