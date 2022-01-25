@@ -9,10 +9,10 @@ using mat3d = vector<matrix>;
 int n;
 vector<int> square;
 
-// n을 m개의 제곱수로 쪼갤 수 있는 방법
+// n을 m개 이하의 제곱수로 쪼갤 수 있는 방법
 int Lagrange(int n, int m, int start) {
-    if (m == 0 && n == 0) return 1;
-    if (m == 0 || n == 0) return 0;
+    if (n == 0) return 1;
+    if (m == 0) return 0;
     int ret = 0;
     for (int i = start; square[i] <= n; i++) {
         ret += Lagrange(n-square[i], m-1, i);
@@ -31,6 +31,6 @@ int main() {
                 break;
             }
         }
-        cout << Lagrange(n, 4, 0) << endl;
+        cout << Lagrange(n, 4, 1) << endl;
     }
 }
