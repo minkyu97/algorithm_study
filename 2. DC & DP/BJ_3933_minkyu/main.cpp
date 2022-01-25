@@ -1,10 +1,10 @@
 #include <iostream>
 #include <vector>
+#include <cmath>
 #define endl '\n'
+#define MAX 987654321
 
 using namespace std;
-using matrix = vector<vector<int> >;
-using mat3d = vector<matrix>;
 
 int n;
 vector<int> square;
@@ -14,8 +14,9 @@ int Lagrange(int n, int m, int start) {
     if (n == 0) return 1;
     if (m == 0) return 0;
     int ret = 0;
-    for (int i = start; square[i] <= n; i++) {
-        ret += Lagrange(n-square[i], m-1, i);
+    // 중요!! 제곱수는 작은수부터 골라나갈 것이므로 n/m보다 클 수 없음
+    for (int i = start; i != -1 && square[i] >= (n/m); i--) {
+        ret += Lagrange(n-square[i], m-1, min(i,(int)(sqrt(n-square[i]))));
     }
     return ret;
 }
@@ -31,6 +32,6 @@ int main() {
                 break;
             }
         }
-        cout << Lagrange(n, 4, 1) << endl;
+        cout << Lagrange(n, 4, sqrt(n)) << endl;
     }
 }
