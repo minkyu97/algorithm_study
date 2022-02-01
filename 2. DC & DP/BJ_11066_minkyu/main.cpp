@@ -8,45 +8,40 @@ using namespace std;
 using matrix = vector<vector<int> >;
 
 int T, K;
-// 각 챕터의 사이즈 저장 챕터 번호: 0 ~ K-1
-vector<int> chapter;
-// i번째부터 j번째 챕터를 합칠 수 있는 최소 비용 저장
+// i번째부터 i+j번째 챕터를 합칠 수 있는 최소 비용 저장
 matrix cache;
-matrix sum;
+vector<int> sum;
 
-int solve(const int& start, const int& end) {
-    if (start >= end) return 0;
-    else if (start + 1 == end) return chapter[start] + chapter[end];
-    int& ret = cache[start][end];
-    if (ret != MAX) return ret;
-    for (int i = start; i < end; i++) {
-        ret = min(solve(start, i) + solve(i+1, end) + sum[start][end], ret);
-    }
-    return ret;
-}
-
-void calcsum() {
-    for (int i = 0; i < K; i++) {
-        int temp = 0;
-        for (int j = i; j < K; j++) {
-            temp += chapter[j];
-            sum[i][j] = temp;
-        }
-    }
+// O(n)으로 줄일 수 있음
+int calcsum(int start, int end) {
+    return sum[end] - sum[start-1];
 }
 
 int main() {
     ios_base::sync_with_stdio(false);
     cin >> T;
-    for (int i = 0; i < T; i++) {
+    while (T--) {
         cin >> K;
-        chapter = vector<int>(K);
-        cache = matrix(K, vector<int>(K, MAX));
-        sum = matrix(K, vector<int>(K));
-        for (int j = 0; j < K; j++) {
-            cin >> chapter[j];
+        cache = matrix(K+1, vector<int>(K+1, MAX));
+        sum = vector<int>(K+1);
+        for (int j = 1; j <= K; j++) {
+            int a;
+            cin >> a;
+            cache[j][0] = 0;
+            sum[j] = sum[j-1] + a;
         }
-        calcsum();
-        cout << solve(0, K-1) << endl;
+        for (int diff = 1; diff < K; diff++) {
+            for (int start = 1; start <= K - diff; start++) {
+                for (int i = 1; i <= diff; i++) {
+                    cache[start][diff] = min(
+                        cache[start][diff],
+                        cache[start][i-1] + cache[start+i][diff-i]
+                    );
+                }
+                cache[start][diff] += calcsum(start, start+diff);
+            }
+        }
+        
+        cout << cache[1][K-1] << endl;
     }
 }
