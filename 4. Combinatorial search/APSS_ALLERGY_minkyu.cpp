@@ -7,10 +7,16 @@ int T, n, m;
 int MAX_DEPTH;
 // nameIndex[name] : table에서 해당 이름을 가진 사람의 행 번호 저장
 map<string, int> nameIndex;
-// table[i] : i번째 음식을 먹을 수 있는 사람들의 리스트
+// foodEater[i] : i번째 음식을 먹을 수 있는 사람들의 리스트
 matrix foodEater;
+// eaterFood[i] : i번째 사람이 먹을 수 있는 음식 리스트
+matrix eaterFood;
 // 현재 상태
 vector<int> edible;
+
+int search(int start) {
+    return distance(edible.begin(), find(edible.begin(), edible.end(), 0));
+}
 
 void select(int food) {
     for (int saram: foodEater[food]) {
@@ -31,11 +37,12 @@ void solve(int start, int num) {
         MAX_DEPTH = num;
         return;
     }
-    if (start == m) return;
-    solve(start+1, num);
-    select(start);
-    solve(start+1, num+1);
-    unselect(start);
+    int inedible = search(start);
+    for (int food: eaterFood[inedible]) {
+        select(food);
+        solve(food+1, num+1);
+        unselect(food);
+    }
 }
 
 int main() {
@@ -47,6 +54,7 @@ int main() {
         MAX_DEPTH = 21;
         cin >> n >> m;
         foodEater = matrix(m);
+        eaterFood = matrix(n);
         edible = vector<int>(n, 0);
         for (int i = 0; i < n; i++) {
             string name;
@@ -59,7 +67,9 @@ int main() {
             while(num--) {
                 string name;
                 cin >> name;
-                foodEater[i].push_back(nameIndex[name]);
+                int person = nameIndex[name];
+                foodEater[i].push_back(person);
+                eaterFood[person].push_back(i);
             }
         }
         solve(0, 0);
