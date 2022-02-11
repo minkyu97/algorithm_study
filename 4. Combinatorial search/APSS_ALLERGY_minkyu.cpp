@@ -25,18 +25,17 @@ void unselect(int food) {
 }
 
 // start 번 음식부터 시작
-void solve(int start, int depth) {
-    if (depth >= MAX_DEPTH) return;
+void solve(int start, int num) {
+    if (num >= MAX_DEPTH) return;
     if (find(edible.begin(), edible.end(), 0) == edible.end()) {
-        MAX_DEPTH = depth;
+        MAX_DEPTH = num;
         return;
     }
-    PASS:
-    for (int i = start; i < m; i++) {
-        select(i);
-        solve(i+1, depth+1);
-        unselect(i);
-    }
+    if (start == m) return;
+    solve(start+1, num);
+    select(start);
+    solve(start+1, num+1);
+    unselect(start);
 }
 
 int main() {
